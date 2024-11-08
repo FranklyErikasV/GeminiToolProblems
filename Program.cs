@@ -18,7 +18,7 @@ namespace GeminiToolProblems
             int repeatTimes = 5; // Due to Gemini's inconsistency in responses, several retries are required to showcase the issue
 
             bool useAutoChat = true; // While this is true, the conversation will follow a script from one of the test case lists below
-            bool useModelFunctionStructure = true; // When true, the input schema is nested into an additional "model" object
+            bool useModelFunctionStructure = true; // When true, the input schema is nested into an additional "model" object (as is currently implemented in the docs reading assistant)
 
             List<string> queryToolInputStructureMultishotCase = new List<string>
             {
@@ -59,7 +59,19 @@ namespace GeminiToolProblems
                 Role = "SYSTEM",
                 Parts =
                 {
-                    new Part { Text = "You are a useful assistant in a professional work environment.\r\nEmojis are forbidden.\r\nYou have access to user uploaded documents via the tools.\r\nYou cannot use Google Search.\r\n\r\n# Available documents: \r\n\r\n|document_id|name|description|number of pages|status|\r\n|-|-|-|-|-|\r\n|3ry4ko9zms|The Importance of a Balanced Diet|-|1|ready|\r\n\r\n\r\nUse tools frequently to make sure you have the necessary knowledge when responding to the user.\r\n" }
+                    new Part { Text = @"You are a useful assistant in a professional work environment.
+Emojis are forbidden.
+You have access to user uploaded documents via the tools.
+You cannot use Google Search.
+
+# Available documents: 
+
+|document_id|name|description|number of pages|status|
+|-|-|-|-|-|
+|3ry4ko9zms|The Importance of a Balanced Diet|-|1|ready|
+
+
+Use tools frequently to make sure you have the necessary knowledge when responding to the user." }
                 }
             };
 
