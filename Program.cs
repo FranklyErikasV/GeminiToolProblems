@@ -18,7 +18,10 @@ namespace GeminiToolProblems
             int repeatTimes = 5; // Due to Gemini's inconsistency in responses, several retries are required to showcase the issue
 
             bool useAutoChat = true; // While this is true, the conversation will follow a script from one of the test case lists below
-            bool useModelFunctionStructure = true; // When true, the input schema is nested into an additional "model" object (as is currently implemented in the docs reading assistant)
+            InputStructure inputStructure = InputStructure.Input; // Determines which input schema to use for the tool calls.
+                                                                  // Normal being non-nested, plain objects,
+                                                                  // Model - nested in a "model" object (as is currently implemented in the docs reading assistant),
+                                                                  // Input - nested in a "input" object
 
             List<string> queryToolInputStructureMultishotCase = new List<string>
             {
@@ -75,8 +78,25 @@ Use tools frequently to make sure you have the necessary knowledge when respondi
                 }
             };
 
-            var retrieveStandardSummaryFunction = useModelFunctionStructure ? FunctionDeclerationProvider.GetSummaryModelTool() : FunctionDeclerationProvider.GetSummaryTool();
-            var queryDocumentsFunction = useModelFunctionStructure ? FunctionDeclerationProvider.GetQueryModelTool() : FunctionDeclerationProvider.GetQueryTool();
+            FunctionDeclaration retrieveStandardSummaryFunction = new FunctionDeclaration();
+            FunctionDeclaration queryDocumentsFunction = new FunctionDeclaration();
+
+            switch (inputStructure)
+            {
+                case InputStructure.Normal:
+                    retrieveStandardSummaryFunction = FunctionDeclerationProvider.GetSummaryTool();
+                    queryDocumentsFunction = FunctionDeclerationProvider.GetQueryTool();
+                    break;
+                case InputStructure.Model:
+                    retrieveStandardSummaryFunction = FunctionDeclerationProvider.GetSummaryModelTool();
+                    queryDocumentsFunction = FunctionDeclerationProvider.GetQueryModelTool();
+                    break;
+                case InputStructure.Input:
+                    retrieveStandardSummaryFunction = FunctionDeclerationProvider.GetSummaryInputTool();
+                    queryDocumentsFunction = FunctionDeclerationProvider.GetQueryInputTool();
+                    break;
+            }
+
             var functionCallNameList = new List<string>
             {
                 retrieveStandardSummaryFunction.Name,
@@ -164,9 +184,20 @@ Use tools frequently to make sure you have the necessary knowledge when respondi
                         {
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("Expected data structure:");
-                            expectedDataStructure = useModelFunctionStructure ?
-                                "{ \"name\": \"retrieve_standard_summary\", \"args\": { \"model\": { \"documents\": [ { \"document_id\": \"3ry4ko9zms\" } ] } } }" :
-                                "{ \"name\": \"retrieve_standard_summary\", \"args\": { \"documents\": [ { \"document_id\": \"3ry4ko9zms\" } ] } }";
+
+                            switch (inputStructure)
+                            {
+                                case InputStructure.Normal:
+                                    expectedDataStructure = "{ \"name\": \"retrieve_standard_summary\", \"args\": { \"documents\": [ { \"document_id\": \"3ry4ko9zms\" } ] } }";
+                                    break;
+                                case InputStructure.Model:
+                                    expectedDataStructure = "{ \"name\": \"retrieve_standard_summary\", \"args\": { \"model\": { \"documents\": [ { \"document_id\": \"3ry4ko9zms\" } ] } } }";
+                                    break;
+                                case InputStructure.Input:
+                                    expectedDataStructure = "{ \"name\": \"retrieve_standard_summary\", \"args\": { \"input\": { \"documents\": [ { \"document_id\": \"3ry4ko9zms\" } ] } } }";
+                                    break;
+                            }
+
                             Console.WriteLine(expectedDataStructure);
                             Console.WriteLine($"Summary Function Call");
 
@@ -177,9 +208,20 @@ Use tools frequently to make sure you have the necessary knowledge when respondi
                         {
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine("Expected data structure:");
-                            expectedDataStructure = useModelFunctionStructure ?
-                                "{ \"name\": \"query_documents\", \"args\": { \"model\": { \"documents\": [ { \"pages\": \"1\", \"document_id\": \"3ry4ko9zms\" } ], \"query\": \"*\" } } }" :
-                                "{ \"name\": \"query_documents\", \"args\": { \"query\": \"*\", \"documents\": [ { \"pages\": \"1\", \"document_id\": \"3ry4ko9zms\" } ] } }";
+
+                            switch (inputStructure)
+                            {
+                                case InputStructure.Normal:
+                                    expectedDataStructure = "{ \"name\": \"query_documents\", \"args\": { \"query\": \"*\", \"documents\": [ { \"pages\": \"1\", \"document_id\": \"3ry4ko9zms\" } ] } }";
+                                    break;
+                                case InputStructure.Model:
+                                    expectedDataStructure = "{ \"name\": \"query_documents\", \"args\": { \"model\": { \"documents\": [ { \"pages\": \"1\", \"document_id\": \"3ry4ko9zms\" } ], \"query\": \"*\" } } }";
+                                    break;
+                                case InputStructure.Input:
+                                    expectedDataStructure = "{ \"name\": \"query_documents\", \"args\": { \"input\": { \"documents\": [ { \"pages\": \"1\", \"document_id\": \"3ry4ko9zms\" } ], \"query\": \"*\" } } }";
+                                    break;
+                            }
+
                             Console.WriteLine(expectedDataStructure);
                             Console.WriteLine($"Query Documents Function Call");
 
@@ -248,6 +290,13 @@ Use tools frequently to make sure you have the necessary knowledge when respondi
 
                 Console.ForegroundColor = ConsoleColor.White;
             }
+        }
+
+        public enum InputStructure
+        {
+            Normal,
+            Model,
+            Input
         }
     }
 }

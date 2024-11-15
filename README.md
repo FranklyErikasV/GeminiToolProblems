@@ -65,8 +65,8 @@ Most of the example is contained in the _Program.cs_ file, in a simple _Main_ me
 While the variable _useAutoChat_ is set to **true**, the program will use a predefined list of user inputs to interact with Gemini.
 If _useAutoChat_ is *false* then the user can chat with the Gemini chatbot through Console inputs. Enter an empty string or "q" to stop the interaction.
 
-_useModelFunctionStructure_ is used to determine whether the tool input's schema is nested into an additional "model" object. As it is currently implemented in the Danfoss document reading chatbot.
-Summary Tool Example when _useModelFunctionStructure_ is **true**:
+_inputStructure_ is used to determine whether the tool input's schema is nested into an additional "model" (or "input") object. As it is currently implemented in the Danfoss document reading chatbot.
+Summary Tool Example when _inputStructure_ is **InputStructure.Model**:
 ```json
 {
   "model": {
@@ -79,7 +79,7 @@ Summary Tool Example when _useModelFunctionStructure_ is **true**:
 }
 ```
 
-Summary Tool Example when _useModelFunctionStructure_ is **false**:
+Summary Tool Example when _inputStructure_ is **InputStructure.Normal**:
 ```json
 {
   "documents": [
@@ -87,6 +87,19 @@ Summary Tool Example when _useModelFunctionStructure_ is **false**:
       "document_id": "3ry4ko9zms"
     }
   ]
+}
+```
+
+Summary Tool Example when _inputStructure_ is **InputStructure.Input**:
+```json
+{
+  "input": {
+    "documents": [
+      {
+        "document_id": "3ry4ko9zms"
+      }
+    ]
+  }
 }
 ```
 
@@ -103,3 +116,5 @@ A specific test case can be set via the _currentCase_ variable.
 ```csharp
 List<string> currentCase = queryToolInputStructureMultishotCase; // Change this to run a different auto-chat case
 ```
+
+Most of the time, Gemini will either fail to correctly structure the input data or call a tool altogether when the input object is nested in a "model" object.

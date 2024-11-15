@@ -1,5 +1,4 @@
 ﻿using Google.Cloud.AIPlatform.V1;
-
 using Type = Google.Cloud.AIPlatform.V1.Type;
 using Value = Google.Protobuf.WellKnownTypes.Value;
 
@@ -130,7 +129,8 @@ namespace GeminiToolProblems
                             },
                             Required = { "documents" }
                         }
-                    }
+                    },
+                    Required = { "model" }
                 }
             };
 
@@ -181,7 +181,106 @@ namespace GeminiToolProblems
                             },
                             Required = { "query", "documents" }
                         }
-                    }
+                    },
+                    Required = { "model" }
+                }
+            };
+
+        public static FunctionDeclaration GetSummaryInputTool() =>
+            new FunctionDeclaration
+            {
+                Name = "retrieve_standard_summary",
+                Description = "Use this tool to get a general summary of the entire document. When the user needs more nuanced details from the contents of the document, use `query_documents` tool.\r\n    Returns a summarization of a document's contents.",
+                Parameters = new OpenApiSchema
+                {
+                    Type = Type.Object,
+                    Properties =
+                    {
+                        ["input"] = new()
+                        {
+                            Type = Type.Object,
+                            Properties =
+                            {
+                                ["documents"] = new()
+                                {
+                                    Type = Type.Array,
+                                    Description = "The list of document ids and pages to get standard summary of",
+                                    Items = new()
+                                    {
+                                        Type = Type.Object,
+                                        Properties =
+                                        {
+                                            ["document_id"] = new()
+                                            {
+                                                Type = Type.String,
+                                                Description = "Use the `document_id` of the document"
+                                            },
+                                            ["pages"] = new()
+                                            {
+                                                Type = Type.String,
+                                                Description = "A string with comma-separated page numbers and/or ranges (e.g., '1,3,5,7-10,20-22'). Use a hyphen (-) for ranges (e.g., '2-5' will get all pages inclusively between 2 and 5)"
+                                            }
+                                        },
+                                        Required = { "document_id" }
+                                    }
+                                }
+                            },
+                            Required = { "documents" }
+                        }
+                    },
+                    Required = { "input" }
+                }
+            };
+
+        public static FunctionDeclaration GetQueryInputTool() =>
+            new FunctionDeclaration
+            {
+                Name = "query_documents",
+                Description = "Use this tool to retrieve the entire contents of a document or relevant parts of documents (chunks) based on a query.\r\n    Returns relevant information as chunks of content from documents.\r\n    **Use the Correct Data Structures:** Adhere to the specified structure for the `model` dictionary and its nested components. The `model` must be a dictionary, `documents` should be a list of dictionaries, and each dictionary within `documents` should have `\"document_id\"` and `\"pages\"` keys.  The `query` should always be a string.",
+                Parameters = new OpenApiSchema
+                {
+                    Type = Type.Object,
+                    Properties =
+                    {
+                        ["input"] = new()
+                        {
+                            Type = Type.Object,
+                            Properties =
+                            {
+                                ["query"] = new()
+                                {
+                                    Type = Type.String,
+                                    Description = "To get all of the content of a specific page range, set to '*'. Otherwise, provide the search phrase (query) to use when in retrieving information from documents. The search phrase must be formulated so it includes all of the nuances of the user's query.",
+                                    Default = new Value { StringValue = "*" }
+                                },
+                                ["documents"] = new()
+                                {
+                                    Type = Type.Array,
+                                    Description = "The list of document ids and pages extracted from the user query",
+                                    Items = new()
+                                    {
+                                        Type = Type.Object,
+                                        Properties =
+                                        {
+                                            ["document_id"] = new()
+                                            {
+                                                Type = Type.String,
+                                                Description = "Use the `document_id` of the document"
+                                            },
+                                            ["pages"] = new()
+                                            {
+                                                Type = Type.String,
+                                                Description = "A string with comma-separated page numbers and/or ranges (e.g., '1,3,5,7-10,20-22'). Use a hyphen (-) for ranges (e.g., '2-5' will get all pages inclusively between 2 and 5)"
+                                            }
+                                        },
+                                        Required = { "document_id" }
+                                    }
+                                }
+                            },
+                            Required = { "query", "documents" }
+                        }
+                    },
+                    Required = { "input" }
                 }
             };
 
