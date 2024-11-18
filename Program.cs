@@ -18,20 +18,20 @@ namespace GeminiToolProblems
             int repeatTimes = 5; // Due to Gemini's inconsistency in responses, several retries are required to showcase the issue
 
             bool useAutoChat = true; // While this is true, the conversation will follow a script from one of the test case lists below
-            InputStructure inputStructure = InputStructure.Input; // Determines which input schema to use for the tool calls.
+            InputStructure inputStructure = InputStructure.Model; // Determines which input schema to use for the tool calls.
                                                                   // Normal being non-nested, plain objects,
                                                                   // Model - nested in a "model" object (as is currently implemented in the docs reading assistant),
                                                                   // Input - nested in a "input" object
 
             List<string> queryToolInputStructureMultishotCase = new List<string>
             {
-                "Hi there!",
+                "Hello there!",
                 "What documents do you have available?",
                 "What headers does that document contain?"
             };
             List<string> summaryToolInputStructureMultishotCase = new List<string>
             {
-                "Hi there!",
+                "Hello there!",
                 "What documents do you have available?",
                 "Can you summarize that document for me?"
             };
@@ -47,7 +47,7 @@ namespace GeminiToolProblems
 
             // =================================================================================
 
-            List<string> currentCase = queryToolInputStructureMultishotCase; // Change this to run a different auto-chat case
+            List<string> currentCase = summaryToolInputStructureMultishotCase; // Change this to run a different auto-chat case
 
             // =================================================================================
 
@@ -59,22 +59,23 @@ namespace GeminiToolProblems
 
             var systemMessageContent = new Content
             {
-                Role = "SYSTEM",
                 Parts =
                 {
-                    new Part { Text = @"You are a useful assistant in a professional work environment.
+                    new Part { Text = @"
+You are a useful assistant in a professional work environment who has autonomy in making its own decisions in order to solve the user's query.
 Emojis are forbidden.
-You have access to user uploaded documents via the tools.
+Document IDs must never be printed to the user.
+You have access to user uploaded documents through your functions.
 You cannot use Google Search.
 
-# Available documents: 
+# Available documents that you have access to
 
 |document_id|name|description|number of pages|status|
 |-|-|-|-|-|
 |3ry4ko9zms|The Importance of a Balanced Diet|-|1|ready|
 
-
-Use tools frequently to make sure you have the necessary knowledge when responding to the user." }
+Use your functions frequently to access and analyze the available documents and answer the user's query.
+" }
                 }
             };
 
@@ -105,11 +106,11 @@ Use tools frequently to make sure you have the necessary knowledge when respondi
 
             for (int i = 0; i < repeatTimes; i++)
             {
-                Console.WriteLine("=======================");
-                Console.WriteLine("||                   ||");
-                Console.WriteLine("||   New Iteration   ||");
-                Console.WriteLine("||                   ||");
-                Console.WriteLine("=======================");
+                Console.WriteLine("==========================");
+                Console.WriteLine("||                      ||");
+                Console.WriteLine("||   New Conversation   ||");
+                Console.WriteLine("||                      ||");
+                Console.WriteLine("==========================");
 
                 List<string> autoChatUserInputList = currentCase.Select(i => i).ToList(); // Deep copy
 

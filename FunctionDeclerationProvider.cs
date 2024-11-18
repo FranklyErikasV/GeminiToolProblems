@@ -48,7 +48,7 @@ namespace GeminiToolProblems
             new FunctionDeclaration
             {
                 Name = "query_documents",
-                Description = "Use this tool to retrieve the entire contents of a document or relevant parts of documents (chunks) based on a query.\r\n    Returns relevant information as chunks of content from documents.\r\n    **Use the Correct Data Structures:** Adhere to the specified structure for the `model` dictionary and its nested components. The `model` must be a dictionary, `documents` should be a list of dictionaries, and each dictionary within `documents` should have `\"document_id\"` and `\"pages\"` keys.  The `query` should always be a string.",
+                Description = "Use this tool to retrieve the entire contents of a document or relevant parts of documents (chunks) based on a query.\r\n    Returns relevant information as chunks of content from documents.\r\n    **Use the Correct Data Structures:** Adhere to the specified structure for the `model` dictionary and its nested components. The `model` must be a dictionary, `documents` should be a list of dictionaries, and each dictionary within `documents` should have `\"document_id\"` and `\"pages\"` keys. The `query` should always be a string.",
                 Parameters = new OpenApiSchema
                 {
                     Type = Type.Object,
@@ -92,7 +92,7 @@ namespace GeminiToolProblems
             new FunctionDeclaration
             {
                 Name = "retrieve_standard_summary",
-                Description = "Use this tool to get a general summary of the entire document. When the user needs more nuanced details from the contents of the document, use `query_documents` tool.\r\n    Returns a summarization of a document's contents.",
+                Description = "Use this tool to get a general summary of the entire document. When the user needs more nuanced details from the contents of the document, use `query_documents` tool.\r\n    Returns a summarization of a document's contents.\r\n    **Use the Correct Data Structures:** Adhere to the specified structure for the `model` dictionary and its nested components. The `model` must be a dictionary, `documents` should be a list of dictionaries, and each dictionary within `documents` should have `\"document_id\"` and `\"pages\"` keys.",
                 Parameters = new OpenApiSchema
                 {
                     Type = Type.Object,
@@ -138,7 +138,7 @@ namespace GeminiToolProblems
             new FunctionDeclaration
             {
                 Name = "query_documents",
-                Description = "Use this tool to retrieve the entire contents of a document or relevant parts of documents (chunks) based on a query.\r\n    Returns relevant information as chunks of content from documents.\r\n    **Use the Correct Data Structures:** Adhere to the specified structure for the `model` dictionary and its nested components. The `model` must be a dictionary, `documents` should be a list of dictionaries, and each dictionary within `documents` should have `\"document_id\"` and `\"pages\"` keys.  The `query` should always be a string.",
+                Description = "Use this tool to retrieve the entire contents of a document or relevant parts of documents (chunks) based on a query.\r\n    Returns relevant information as chunks of content from documents.\r\n    **Use the Correct Data Structures:** Adhere to the specified structure for the `model` dictionary and its nested components. The `model` must be a dictionary, `documents` should be a list of dictionaries, and each dictionary within `documents` should have `\"document_id\"` and `\"pages\"` keys. The `query` should always be a string.",
                 Parameters = new OpenApiSchema
                 {
                     Type = Type.Object,
@@ -190,7 +190,7 @@ namespace GeminiToolProblems
             new FunctionDeclaration
             {
                 Name = "retrieve_standard_summary",
-                Description = "Use this tool to get a general summary of the entire document. When the user needs more nuanced details from the contents of the document, use `query_documents` tool.\r\n    Returns a summarization of a document's contents.",
+                Description = "Use this tool to get a general summary of the entire document. When the user needs more nuanced details from the contents of the document, use `query_documents` tool.\r\n    Returns a summarization of a document's contents.\r\n    **Use the Correct Data Structures:** Adhere to the specified structure for the `input` dictionary and its nested components. The `input` must be a dictionary, `documents` should be a list of dictionaries, and each dictionary within `documents` should have `\"document_id\"` and `\"pages\"` keys.",
                 Parameters = new OpenApiSchema
                 {
                     Type = Type.Object,
@@ -236,7 +236,7 @@ namespace GeminiToolProblems
             new FunctionDeclaration
             {
                 Name = "query_documents",
-                Description = "Use this tool to retrieve the entire contents of a document or relevant parts of documents (chunks) based on a query.\r\n    Returns relevant information as chunks of content from documents.\r\n    **Use the Correct Data Structures:** Adhere to the specified structure for the `model` dictionary and its nested components. The `model` must be a dictionary, `documents` should be a list of dictionaries, and each dictionary within `documents` should have `\"document_id\"` and `\"pages\"` keys.  The `query` should always be a string.",
+                Description = "Use this tool to retrieve the entire contents of a document or relevant parts of documents (chunks) based on a query.\r\n    Returns relevant information as chunks of content from documents.\r\n    **Use the Correct Data Structures:** Adhere to the specified structure for the `input` dictionary and its nested components. The `input` must be a dictionary, `documents` should be a list of dictionaries, and each dictionary within `documents` should have `\"document_id\"` and `\"pages\"` keys. The `query` should always be a string.",
                 Parameters = new OpenApiSchema
                 {
                     Type = Type.Object,
